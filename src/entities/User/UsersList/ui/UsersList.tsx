@@ -1,10 +1,13 @@
-import {useGetUsersQuery} from "../../../../app/redux/mockApi.ts";
+import {useGetPaginatedUsersQuery} from "../../../../app/redux/mockApi.ts";
 import {ErrorAlert} from "../../../../shared/ErrorAlert/ui/ErrorAlert.tsx";
 import {Avatar, Card, CardContent, Skeleton, Typography} from "@mui/material";
 import type {User} from "../../../../shared/types/user.ts";
 
-export const UsersList = ({page = 1}) => {
-    const {data = [], isLoading, error} = useGetUsersQuery(page);
+interface Props {
+    page: number;
+}
+export const UsersList = ({page = 1}: Props) => {
+    const {data = [], isLoading, error} = useGetPaginatedUsersQuery(page);
     if (error) { // @ts-ignore
         return <ErrorAlert text={`${error.status} ${error.data}`}/>;
     }
@@ -30,14 +33,14 @@ export const UsersList = ({page = 1}) => {
     }
     return (
         <div>
-            {data.map((user: User) => <Card key={user.id} sx={{margin: '10px'}}>
+            {data.length ? data.map((user: User) => <Card key={user.id} sx={{margin: '10px'}}>
                 <CardContent>
                     <Typography variant="h6">{user.name}</Typography>
                     <Avatar src={user.avatar} alt={user.name}/>
                     <Typography variant="body2">Created at: {user.createdAt}</Typography>
                     <Typography variant="body2">ID: {user.id}</Typography>
                 </CardContent>
-            </Card>)}
+            </Card>) : null}
         </div>
     );
 };

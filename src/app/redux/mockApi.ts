@@ -8,10 +8,14 @@ export const mockApi = createApi({
     reducerPath: "mockApi",
     baseQuery: fetchBaseQuery({baseUrl: API_URL}),
     endpoints: (build) => ({
-        getUsers: build.query({
+        getPaginatedUsers: build.query({
             query: (page: number) => `users?page=${page}&limit=${LIMIT}`,
+        }),
+        getTotalPagesCount: build.query<number, void>({
+            query: () => `users`,
+            transformResponse: (result: any) => Math.ceil(result.length / LIMIT)
         })
     })
 })
 
-export const {useGetUsersQuery} = mockApi;
+export const {useGetPaginatedUsersQuery, useGetTotalPagesCountQuery} = mockApi;
