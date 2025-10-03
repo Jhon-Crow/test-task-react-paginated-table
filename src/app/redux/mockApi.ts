@@ -11,7 +11,7 @@ export const mockApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: API_URL}),
     endpoints: (build) => ({
         getPaginatedUsers: build.query<User[], number>({
-            query: (page: number) => `users?sortBy=createdAt&order=asc&page=${page}&limit=${LIMIT}`,
+            query: (page: number) => `users?sortBy=createdAt&order=desc&page=${page}&limit=${LIMIT}`,
             providesTags: (result): readonly { type: 'Users'; id: string | number }[] => result ? [
                 ...result.map((user: User) => ({type: "Users" as const, id: user.id})),
                 {type: "Users" as const, id: "LIST"}
@@ -25,15 +25,15 @@ export const mockApi = createApi({
             query: (user: Omit<User, 'id' | 'createdAt'>) => ({
                 url: "users",
                 method: "POST",
-                body: user
+                body: { ...user, createdAt: new Date().toISOString() },
             }),
             invalidatesTags: [{type: "Users", id: "LIST"}],
         }),
         updateUser: build.mutation<void, Pick<User, 'id'> & Partial<User>>({
-            query: ({id, ...patch}) => ({
+            query: ({id, ...put}) => ({
                 url: `users/${id}`,
-                method: 'PATCH',
-                body: patch,
+                method: 'PUT',
+                body: put,
             }),
             invalidatesTags: [{type: "Users", id: "LIST"}],
         }),

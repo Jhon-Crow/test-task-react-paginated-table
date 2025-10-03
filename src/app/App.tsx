@@ -8,7 +8,7 @@ function App() {
   return (
     <div>
         <UserForm actionType={'add'} triggerStyle={
-            {position: 'fixed', bottom: '20px', right: '20px'}
+            {position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999}
         }/>
         <UsersList page={page} />
         <PaginationMy  page={page} setPage={setPage}/>

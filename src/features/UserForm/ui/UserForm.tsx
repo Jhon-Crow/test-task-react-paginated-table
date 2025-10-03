@@ -3,56 +3,70 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useState} from "react";
 import {useAddUserMutation, useUpdateUserMutation} from "../../../app/redux/mockApi.ts";
 import {TextareaAutosize} from "@mui/material";
+import {userFormActions, userFormSelectors} from "../model/slice/userFormSlice.ts";
+import {useDispatch, useSelector} from "react-redux";
+import type {User} from "../../../shared/types/user.ts";
 
-export function UserForm({actionType, id, triggerStyle}: {actionType: 'add' | 'edit', id?: string, triggerStyle?: object}) {
-    const [open, setOpen] = useState(false);
-    const [name, setName] = useState('');
-    const [avatar, setAvatar] = useState('');
-    const [details, setDetails] = useState('');
+export function UserForm({actionType, triggerStyle, user}: {
+    actionType: 'add' | 'edit',
+    triggerStyle?: object,
+    user?: User
+}) {
+    const dispatch = useDispatch();
+    const {open, name, avatar, details, id} = useSelector(userFormSelectors.formState);
 
-    const [addUser, { isLoading: isAddUserLoading }] = useAddUserMutation();
-    const [updateUser, { isLoading: isUpdateUserLoading }] = useUpdateUserMutation();
+    const setName = (name: string) => dispatch(userFormActions.setName(name));
+    const setAvatar = (avatar: string) => dispatch(userFormActions.setAvatar(avatar));
+    const setDetails = (details: string) => dispatch(userFormActions.setDetails(details));
+
+
+    const [addUser, {isLoading: isAddUserLoading}] = useAddUserMutation();
+    const [updateUser, {isLoading: isUpdateUserLoading}] = useUpdateUserMutation();
 
 
     const handleClickOpen = () => {
-        setOpen(true);
+        dispatch(userFormActions.resetForm());
+        if (user) {
+            dispatch(userFormActions.setName(user.name));
+            dispatch(userFormActions.setAvatar(user.avatar));
+            dispatch(userFormActions.setDetails(user.details));
+            dispatch(userFormActions.setId(user.id));
+        }
+        dispatch(userFormActions.openForm());
     };
 
     const handleClose = () => {
-        setOpen(false);
+        dispatch(userFormActions.closeForm());
+        dispatch(userFormActions.resetForm());
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const editHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (actionType === 'add') {
-            addUser({name, avatar, details});
-        } else if (actionType === 'edit' && id) {
-            updateUser({id, name, avatar, details});
-        }
+        updateUser({id, name, avatar, details});
         handleClose();
     };
 
+    const addHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        addUser({name, avatar, details});
+        handleClose();
+    };
     return (
         <>
             <Button
                 style={triggerStyle}
                 disabled={isAddUserLoading || isUpdateUserLoading}
-                variant="contained" color={actionType === 'add' ? 'success' : 'secondary'} onClick={handleClickOpen}>
-               {actionType === 'add' ? 'Add user' : 'Edit user' }
+                variant="contained" color={actionType === 'add' ? 'success' : 'secondary'}
+                onClick={handleClickOpen}>
+                {actionType === 'add' ? 'Add user' : 'Edit user'}
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Subscribe</DialogTitle>
+                <DialogTitle>{!id ? `Add user ${name}` : `Edit ${name}`}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <form onSubmit={handleSubmit} id="subscription-form">
+                    <form onSubmit={!id ? addHandler : editHandler} id="subscription-form">
                         <TextField
                             autoFocus
                             required
@@ -92,11 +106,12 @@ export function UserForm({actionType, id, triggerStyle}: {actionType: 'add' | 'e
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit" form="subscription-form" disabled={isAddUserLoading || isUpdateUserLoading}>
-                        {actionType === 'add' ? 'Add user' : 'Edit user' }
+                    <Button type="submit" form="subscription-form"
+                            disabled={isAddUserLoading || isUpdateUserLoading}>
+                        {!id ? 'Add user' : 'Edit user'}
                     </Button>
                 </DialogActions>
             </Dialog>
         </>
     );
-}
+};

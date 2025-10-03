@@ -2,6 +2,7 @@ import {useGetPaginatedUsersQuery} from "../../../../app/redux/mockApi.ts";
 import {ErrorAlert} from "../../../../shared/ErrorAlert/ui/ErrorAlert.tsx";
 import type {User} from "../../../../shared/types/user.ts";
 import {UserCard} from "./UserCard.tsx";
+import {UserForm} from "../../../../features/UserForm/ui/UserForm.tsx";
 
 interface Props {
     page: number;
@@ -18,7 +19,13 @@ export const UsersList = ({page = 1}: Props) => {
     }
     return (
         <div>
-            {data.length ? data.map((user: User) => <UserCard key={user.id} user={user} isLoading={isLoading}/>) : null}
+            {data.length
+                ? data.map((user: User) => <UserCard
+                    key={user.id} user={user} isLoading={isLoading}
+                    actionButton={
+                        <UserForm key={user.id} actionType={'edit'} user={user}/>
+                    }/>)
+                : null}
         </div>
     )
 };

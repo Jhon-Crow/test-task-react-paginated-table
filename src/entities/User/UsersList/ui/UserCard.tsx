@@ -27,7 +27,7 @@ export const UserCard = ({user, isLoading, actionButton}: {
     }
     if (!user) return null;
     return (
-        <Card key={user.id} sx={{margin: '10px', display: 'flex'}}>
+        <Card key={user.id} sx={{margin: '10px', display: 'flex', justifyContent: 'space-between'}}>
             <CardContent>
                 <Typography variant="h6">{user.name}</Typography>
                 <Avatar src={user.avatar} alt={user.name}/>
