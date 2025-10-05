@@ -1,6 +1,7 @@
 import {Avatar, Card, CardActions, CardContent, Skeleton, Typography} from "@mui/material";
 import type {User} from "../../../../shared/types/user.ts";
 import type {ReactNode} from "react";
+import {Link} from "react-router-dom";
 
 export const UserCard = ({user, isLoading, actionButton}: {
     user?: User,
@@ -28,18 +29,19 @@ export const UserCard = ({user, isLoading, actionButton}: {
     if (!user) return null;
     return (
         <Card key={user.id} sx={{margin: '10px', display: 'flex', justifyContent: 'space-between'}}>
-            <CardContent>
-                <Typography variant="h6">{user.name}</Typography>
-                <Avatar src={user.avatar} alt={user.name}/>
-                <Typography variant="body2">Created at: {user.createdAt}</Typography>
-                <Typography variant="body2">ID: {user.id}</Typography>
-            </CardContent>
+            <Link to={`/user/${user.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                <CardContent>
+                    <Typography variant="h6">{user.name}</Typography>
+                    <Avatar src={user.avatar} alt={user.name}/>
+                    <Typography variant="body2">Created at: {user.createdAt}</Typography>
+                    <Typography variant="body2">ID: {user.id}</Typography>
+                </CardContent>
+            </Link>
             {actionButton ?
-                <CardActions>
+                <CardActions sx={{marginRight: '2rem'}}>
                     {actionButton}
                 </CardActions>
                 : null}
-
         </Card>
     );
 };

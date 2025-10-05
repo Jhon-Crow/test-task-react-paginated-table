@@ -1,10 +1,17 @@
 import {UserForm} from "../../../features/UserForm/ui/UserForm.tsx";
 import {UsersList} from "../../../entities/User/UsersList/ui/UsersList.tsx";
 import {PaginationMy} from "../../../features/Pagination/ui/PaginationMy.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {useGetTotalPagesCountQuery} from "../../../app/redux/mockApi.ts";
+import {useLayoutEffect} from "react";
 
 export const UsersPage = () => {
-    const {page} = useParams();
+    const navigate = useNavigate();
+    let {page} = useParams();
+    const {data} = useGetTotalPagesCountQuery();
+    useLayoutEffect(() => {
+        if (data && (Number(page) > data || isNaN(Number(page)))) navigate("/users/1", {replace: true});
+    },[data, page]);
     return (
         <div>
             <UserForm actionType={'add'} triggerStyle={

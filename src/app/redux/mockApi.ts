@@ -17,6 +17,9 @@ export const mockApi = createApi({
                 {type: "Users" as const, id: "LIST"}
             ] : [{type: "Users" as const, id: "LIST"}]
         }),
+        getUserById: build.query<User, number>({
+            query: (id: number) => `users/${id}`,
+        }),
         getTotalPagesCount: build.query<number, void>({
             query: () => `users`,
             transformResponse: (result: any) => Math.ceil(result.length / LIMIT)
@@ -42,6 +45,7 @@ export const mockApi = createApi({
 
 export const {
     useGetPaginatedUsersQuery,
+    useGetUserByIdQuery,
     useGetTotalPagesCountQuery,
     useAddUserMutation,
     useUpdateUserMutation
