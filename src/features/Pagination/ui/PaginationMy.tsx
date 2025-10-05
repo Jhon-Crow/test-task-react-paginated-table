@@ -1,18 +1,18 @@
 import {Pagination} from "@mui/material";
 import {useGetTotalPagesCountQuery} from "../../../app/redux/mockApi.ts";
 import {ErrorAlert} from "../../../shared/ErrorAlert/ui/ErrorAlert.tsx";
+import {useNavigate} from "react-router-dom";
 
 export interface PaginationMyProps {
     page: number;
-    setPage: (page: number) => void;
 }
 
-export const PaginationMy = ({page, setPage}: PaginationMyProps) => {
-
+export const PaginationMy = ({page}: PaginationMyProps) => {
+    const navigate = useNavigate();
     const {data, error} = useGetTotalPagesCountQuery();
     // @ts-ignore
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
+    const handleChange = (event, newPage) => {
+        navigate(`/users/${newPage}`);
     };
     if (!data) return null;
     if (error) { // @ts-ignore

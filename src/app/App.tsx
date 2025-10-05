@@ -1,19 +1,20 @@
-import {useState} from "react";
-import {UsersList} from "../entities/User/UsersList/ui/UsersList.tsx";
-import {PaginationMy} from "../features/Pagination/ui/PaginationMy.tsx";
-import {UserForm} from "../features/UserForm/ui/UserForm.tsx";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {UsersPage} from "../pages/UsersPage/ui/UsersPage.tsx";
+import {UserDetailsPage} from "../pages/UserDetailsPage/ui/UserDetailsPage.tsx";
+import {Layout} from "../features/Layout/ui/Layout.tsx";
 
 function App() {
-    const [page, setPage] = useState(1);
-  return (
-    <div>
-        <UserForm actionType={'add'} triggerStyle={
-            {position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999}
-        }/>
-        <UsersList page={page} />
-        <PaginationMy  page={page} setPage={setPage}/>
-    </div>
-  )
+    return (
+        <>
+            <Routes>
+                <Route path={'/'} element={<Layout/>}>
+                    <Route index element={<Navigate to="/users/1" replace/>}/>
+                    <Route index path={'/users/:page'} element={<UsersPage/>}/>
+                    <Route path={'user/:id'} element={<UserDetailsPage/>}/>
+                </Route>
+            </Routes>
+        </>
+    )
 }
 
 export default App

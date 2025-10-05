@@ -8,7 +8,6 @@ interface Props {
     page: number;
 }
 
-
 export const UsersList = ({page = 1}: Props) => {
     const {data = [], isLoading, error} = useGetPaginatedUsersQuery(page);
     if (isLoading) return (
