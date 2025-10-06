@@ -8,7 +8,7 @@ import {useLayoutEffect} from "react";
 export const UsersPage = () => {
     const navigate = useNavigate();
     let {page} = useParams();
-    const {data} = useGetTotalPagesCountQuery();
+    const {data, error} = useGetTotalPagesCountQuery();
     useLayoutEffect(() => {
         if (data && (Number(page) > data || isNaN(Number(page)))) navigate("/users/1", {replace: true});
     },[data, page]);
@@ -18,7 +18,7 @@ export const UsersPage = () => {
                 {position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999}
             }/>
             <UsersList page={page ? Number(page) : 1}/>
-            <PaginationMy page={page ? Number(page) : 1}/>
+            <PaginationMy page={page ? Number(page) : 1} data={data} error={error}/>
         </div>
     );
 };

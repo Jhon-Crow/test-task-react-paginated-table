@@ -1,15 +1,17 @@
 import {Pagination} from "@mui/material";
-import {useGetTotalPagesCountQuery} from "../../../app/redux/mockApi.ts";
 import {ErrorAlert} from "../../../shared/ErrorAlert/ui/ErrorAlert.tsx";
 import {useNavigate} from "react-router-dom";
+import type {SerializedError} from "@reduxjs/toolkit";
+import type {FetchBaseQueryError} from "@reduxjs/toolkit/query";
 
 export interface PaginationMyProps {
     page: number;
+    data?: number;
+    error?: FetchBaseQueryError | SerializedError;
 }
 
-export const PaginationMy = ({page}: PaginationMyProps) => {
+export const PaginationMy = ({page, data, error}: PaginationMyProps) => {
     const navigate = useNavigate();
-    const {data, error} = useGetTotalPagesCountQuery();
     // @ts-ignore
     const handleChange = (event, newPage) => {
         navigate(`/users/${newPage}`);

@@ -7,7 +7,7 @@ const LIMIT = import.meta.env.VITE_PAGE_SIZE;
 
 export const mockApi = createApi({
     reducerPath: "mockApi",
-    tagTypes: ["Users"],
+    tagTypes: ["Users", "TotalPageCount"],
     baseQuery: fetchBaseQuery({baseUrl: API_URL}),
     endpoints: (build) => ({
         getPaginatedUsers: build.query<User[], number>({
@@ -22,7 +22,8 @@ export const mockApi = createApi({
         }),
         getTotalPagesCount: build.query<number, void>({
             query: () => `users`,
-            transformResponse: (result: any) => Math.ceil(result.length / LIMIT)
+            transformResponse: (result: any) => Math.ceil(result.length / LIMIT),
+            providesTags: ['TotalPageCount'],
         }),
         addUser: build.mutation({
             query: (user: Omit<User, 'id' | 'createdAt'>) => ({
@@ -30,7 +31,7 @@ export const mockApi = createApi({
                 method: "POST",
                 body: { ...user, createdAt: new Date().toISOString() },
             }),
-            invalidatesTags: [{type: "Users", id: "LIST"}],
+            invalidatesTags: [{type: "Users", id: "LIST"}, 'TotalPageCount'],
         }),
         updateUser: build.mutation<void, Pick<User, 'id'> & Partial<User>>({
             query: ({id, ...put}) => ({
