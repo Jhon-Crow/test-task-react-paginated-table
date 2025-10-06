@@ -43,15 +43,15 @@ export function UserForm({actionType, triggerStyle, user}: {
         dispatch(userFormActions.resetForm());
     };
 
-    const editHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    const editHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        updateUser({id, name, avatar, details});
+        await updateUser({id, name, avatar, details}).unwrap();
         handleClose();
     };
 
-    const addHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    const addHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        addUser({name, avatar, details});
+        await addUser({name, avatar, details}).unwrap();
         handleClose();
     };
     return (
