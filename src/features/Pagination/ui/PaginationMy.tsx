@@ -12,12 +12,12 @@ export interface PaginationMyProps {
 
 export const PaginationMy = ({page, data, error}: PaginationMyProps) => {
     const navigate = useNavigate();
-    // @ts-ignore
+    // @ts-expect-error event is never be used
     const handleChange = (event, newPage) => {
         navigate(`/users/${newPage}`);
     };
     if (!data) return null;
-    if (error) { // @ts-ignore
+    if (error) { // @ts-expect-error Property 'status' & 'data' does not exist on type 'FetchBaseQueryError | SerializedError'
         return <ErrorAlert text={`${error.status} ${error.data}`}/>;
     }
     return (

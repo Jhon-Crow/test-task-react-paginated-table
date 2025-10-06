@@ -13,7 +13,7 @@ export const UsersList = ({page = 1}: Props) => {
     if (isLoading) return (
         [...Array(10)].map((_, i) => <UserCard key={i} isLoading={isLoading}/>)
     )
-    if (error) { // @ts-ignore
+    if (error) { // @ts-expect-error Property 'status' & 'data' does not exist on type 'FetchBaseQueryError | SerializedError'
         return <ErrorAlert text={`${error.status} ${error.data}`}/>;
     }
     return (

@@ -162,7 +162,7 @@ export const UserDetailsPage = () => {
             </Card>
         </Container>
     );
-    if (error) { // @ts-ignore
+    if (error) { // @ts-expect-error Property 'status' & 'data' does not exist on type 'FetchBaseQueryError | SerializedError'
         return <ErrorAlert text={`${error.status} ${error.data}`}/>;
     }
     if (user) return (

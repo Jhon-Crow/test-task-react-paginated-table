@@ -22,7 +22,7 @@ export const mockApi = createApi({
         }),
         getTotalPagesCount: build.query<number, void>({
             query: () => `users`,
-            transformResponse: (result: any) => Math.ceil(result.length / LIMIT),
+            transformResponse: (result: User[]) => Math.ceil(result.length / LIMIT),
             providesTags: ['TotalPageCount'],
         }),
         addUser: build.mutation({

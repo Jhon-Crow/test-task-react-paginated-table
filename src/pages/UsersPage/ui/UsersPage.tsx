@@ -7,11 +7,11 @@ import {useLayoutEffect} from "react";
 
 export const UsersPage = () => {
     const navigate = useNavigate();
-    let {page} = useParams();
+    const {page} = useParams();
     const {data, error} = useGetTotalPagesCountQuery();
     useLayoutEffect(() => {
         if (data && (Number(page) > data || isNaN(Number(page)))) navigate("/users/1", {replace: true});
-    },[data, page]);
+    },[data, page, navigate]);
     return (
         <div>
             <UserForm actionType={'add'} triggerStyle={
