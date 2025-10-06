@@ -3,6 +3,7 @@ import {ErrorAlert} from "../../../../shared/ErrorAlert/ui/ErrorAlert.tsx";
 import type {User} from "../../../../shared/types/user.ts";
 import {UserCard} from "./UserCard.tsx";
 import {UserForm} from "../../../../features/UserForm/ui/UserForm.tsx";
+import {Typography} from "@mui/material";
 
 interface Props {
     page: number;
@@ -24,7 +25,18 @@ export const UsersList = ({page = 1}: Props) => {
                     actionButton={
                         <UserForm key={user.id} actionType={'edit'} user={user}/>
                     }/>)
-                : null}
+                : <Typography
+                variant="h3"
+                component="h1"
+                sx={{
+                    mt: 3,
+                    fontWeight: 700,
+                    fontSize: {xs: '2rem', md: '2.5rem'},
+                    textAlign: 'center'
+                }}
+            >
+                No users found
+            </Typography>}
         </div>
     )
 };
